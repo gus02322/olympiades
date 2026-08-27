@@ -288,3 +288,5 @@ La réponse est du JSONP (`google.visualization.Query.setResponse({...})`) : `sr
 ---
 
 Fait avec ☀️ pour l'Île d'Yeu. Bonne olympiade !
+
+<!-- redeploy: 2026-08-27T14:45:03Z -->
