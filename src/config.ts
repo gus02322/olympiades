@@ -16,7 +16,7 @@
  * Tant que SHEET_ID reste vide, l'application affiche les données de démonstration
  * (édition 2025) pour rester jolie et vivante.
  */
-export const SHEET_ID = ''
+export const SHEET_ID = '1RxVzs3qqpeCPEagZuPbslxHUUJf1BQJzActYsUTqe8I'
 
 /**
  * Noms des onglets du Google Sheet.
