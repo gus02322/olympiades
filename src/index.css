@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-sable text-nuit antialiased;
+    /* Dégradé estival bord de mer en fond. */
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(255, 209, 102, 0.35), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(6, 214, 160, 0.25), transparent 45%),
+      radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.25), transparent 55%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  /* Carte blanche arrondie, ombre douce — brique visuelle de base. */
+  .carte {
+    @apply rounded-2xl bg-white/90 backdrop-blur shadow-carte;
+  }
+
+  /* Zone tactile confortable. */
+  .zone-tactile {
+    @apply min-h-[44px] min-w-[44px];
+  }
+}
+
+/* Barre de défilement discrète. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(11, 37, 69, 0.2);
+  border-radius: 9999px;
+}
+
+/* Respecte la préférence « moins d'animations ». */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
