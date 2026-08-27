@@ -1,9 +1,17 @@
-cle,valeur
-nom_edition,OlympYeu 2027
-date,samedi 14 août 2027
-lieu,Île d'Yeu
-message_accueil,Chapitre 9 — préparez-vous 💪
-couleur_primaire,#0EA5E9
-prochaine_edition,samedi 14 août 2027
-prochaine_date_iso,2027-08-14
-prochaine_note,Préparez-vous à écrire la suite 💪
+annee,cle,valeur
+,annee_defaut,2025
+,prochaine_edition,samedi 14 août 2027
+,prochaine_date_iso,2027-08-14
+,prochaine_note,Préparez-vous à écrire la suite 💪
+2025,nom_edition,OlympYeu 2025
+2025,date,samedi 16 août 2025
+2025,lieu,Île d'Yeu
+2025,theme,Cinéma & BD
+2025,couleur_primaire,#0EA5E9
+2025,message_accueil,Astérix & Obélix : par Toutatis, que la fête commence ! 🛡️
+2024,nom_edition,OlympYeu 2024
+2024,date,samedi 17 août 2024
+2024,lieu,Île d'Yeu
+2024,theme,Grèce antique
+2024,couleur_primaire,#06D6A0
+2024,message_accueil,Bienvenue aux Yeu'Olympiques antiques ! 🏛️

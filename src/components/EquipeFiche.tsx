@@ -55,6 +55,15 @@ export function EquipeFiche({
               </div>
             )}
           </div>
+          {/* Note éventuelle de l'équipe (ex. vainqueur de la finale) */}
+          {equipe.note && (
+            <p
+              className="mt-3 inline-block rounded-full px-3 py-1 text-sm font-semibold"
+              style={{ backgroundColor: 'rgba(255,255,255,0.22)', color: couleurTexte }}
+            >
+              {equipe.note}
+            </p>
+          )}
         </div>
       </section>
 

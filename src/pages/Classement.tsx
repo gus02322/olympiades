@@ -61,9 +61,16 @@ export default function Classement() {
                         <p className="truncate font-semibold text-nuit">{r.equipe.nom}</p>
                         <p className="text-xs text-nuit/50">
                           {r.rang === 1
-                            ? 'En tête 👑'
-                            : `à ${r.ecartAvecPremier} pt${r.ecartAvecPremier > 1 ? 's' : ''} du 1er`}
+                            ? 'Champion 👑'
+                            : r.ecartAvecPremier > 0
+                            ? `à ${r.ecartAvecPremier} pt${r.ecartAvecPremier > 1 ? 's' : ''} du 1er`
+                            : `${r.total} pts`}
                         </p>
+                        {r.note && (
+                          <p className="mt-0.5 inline-block rounded-full bg-soleil/20 px-2 py-0.5 text-[11px] font-semibold text-nuit">
+                            {r.note}
+                          </p>
+                        )}
                       </div>
                       <span className="text-lg font-extrabold text-nuit">{r.total}</span>
                     </div>

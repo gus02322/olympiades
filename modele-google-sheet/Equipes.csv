@@ -1,5 +1,9 @@
-nom,theme,emoji,couleur
-Top Yeu,USA,🦅,#EF476F
-Les Bronzés,Grèce,🏛️,#FFB703
-Astérix & Obélix,Égypte,🛡️,#06D6A0
-E.T.,Mexique,🛸,#118AB2
+annee,nom,theme,emoji,couleur,points_total,rang,note
+2025,Top Yeu,USA,🦅,#EF476F,,2,
+2025,Les Bronzés,Grèce,🏛️,#FFB703,,4,
+2025,Astérix & Obélix,Égypte,🛡️,#06D6A0,,1,🏆 Vainqueur de la finale (Flip Cup)
+2025,E.T.,Mexique,🛸,#118AB2,,3,
+2024,Salade Grecque,Athènes,🥗,#06D6A0,140,1,
+2024,Les Spartiates,Sparte,🛡️,#EF476F,120,2,
+2024,Les Dieux,Olympe,⚡,#FFB703,110,3,
+2024,Les Minotaures,Crète,🐂,#118AB2,90,4,

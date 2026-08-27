@@ -1,10 +1,8 @@
-ordre,nom,horaire,duree,lieu,format,regles,systeme_points
-1,Volley Ball,10h00 - 11h00,1h,Plage des Sableaux,Tous ensemble (round-robin),Chaque équipe affronte les autres en matchs courts.,"Match en 10 pts, on gagne le nombre de points marqués, +5 pts bonus au vainqueur."
-2,Balle aux prisonniers,11h00 - 11h45,45 min,Plage des Sableaux,Tous ensemble,Élimine les adversaires en les touchant avec la balle.,"Match en 10 pts, on gagne le nombre de points marqués."
-3,Spike Ball,11h45 - 12h30,45 min,Plage,2 vs 2,"3 matchs par équipe, dont 1 match 100 % féminin.","Match en 10 pts, points marqués + 5 pts bonus vainqueur."
-4,Bombe à eau,12h30 - 13h00,30 min,Jardin,Tous ensemble,Fais voyager la bombe à eau le plus loin possible sans l'éclater.,"Classement : 1er = 25, 2e = 12, 3e = 6, 4e = 2."
-5,Football 3x3,14h00 - 15h00,1h,Terrain de foot,3 vs 3,Chaque équipe affronte les 3 autres. Match en 1 but.,"Match en 1 but : vainqueur = 10, perdant = 0."
-6,Baby-Foot,15h00 - 15h45,45 min,Bar de la plage,1 vs 1,"Duels en 1 manche, dont 1 match 100 % féminin.","Match en 1 manche : vainqueur = 10, perdant = 0."
-7,Tournante géante,15h45 - 16h30,45 min,Table de ping-pong,Tous ensemble,La tournante géante autour de la table, dernier éliminé.,Classement 25 / 12 / 6 / 2.
-8,Ventriglisse + Flip Cup,16h30 - 17h30,1h,Grande pelouse,Tous ensemble,Relais : ventriglisse puis flip cup en équipe.,Classement 25 / 12 / 6 / 2.
-9,Déguisement,Toute la journée,—,Partout,Avant le jour J - voté par un jury,Meilleur déguisement sur le thème du pays de chaque équipe.,Classement 25 / 12 / 6 / 2.
+annee,ordre,nom,horaire,duree,lieu,format,regles,systeme_points
+2025,1,Volley Ball,10h00 - 11h00,1h,Plage des Sableaux,Tous ensemble (round-robin),Chaque équipe affronte les autres en matchs courts.,"Match en 10 pts, on gagne le nombre de points marqués, +5 pts bonus au vainqueur."
+2025,2,Balle aux prisonniers,11h00 - 11h45,45 min,Plage des Sableaux,Tous ensemble,Élimine les adversaires en les touchant avec la balle.,"Match en 10 pts, on gagne le nombre de points marqués."
+2025,5,Football 3x3,14h00 - 15h00,1h,Terrain de foot,3 vs 3,Chaque équipe affronte les 3 autres. Match en 1 but.,"Match en 1 but : vainqueur = 10, perdant = 0."
+2025,9,Déguisement,Toute la journée,—,Partout,Avant le jour J - voté par un jury,Meilleur déguisement sur le thème du pays de chaque équipe.,Classement 25 / 12 / 6 / 2.
+2024,1,Pétanque grecque,10h30 - 11h30,1h,Boulodrome,Tous ensemble,Pétanque revisitée façon antique.,Classement de l'épreuve.
+2024,2,Course de chars,11h30 - 12h30,1h,Grande pelouse,2 vs 2,Relais de brouettes-chars.,Classement de l'épreuve.
+2024,3,Lancer d'amphore,14h00 - 15h00,1h,Plage,Tous ensemble,Lancer de précision.,Classement de l'épreuve.

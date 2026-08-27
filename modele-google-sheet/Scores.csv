@@ -1,37 +1,17 @@
-epreuve,equipe,points,classement
-Volley Ball,Top Yeu,45,1
-Volley Ball,Astérix & Obélix,34,2
-Volley Ball,Les Bronzés,32,3
-Volley Ball,E.T.,13,4
-Balle aux prisonniers,Astérix & Obélix,30,1
-Balle aux prisonniers,Top Yeu,20,2
-Balle aux prisonniers,Les Bronzés,10,3
-Balle aux prisonniers,E.T.,0,4
-Spike Ball,Top Yeu,45,1
-Spike Ball,E.T.,34,2
-Spike Ball,Astérix & Obélix,26,3
-Spike Ball,Les Bronzés,15,4
-Bombe à eau,Top Yeu,25,1
-Bombe à eau,Astérix & Obélix,12,2
-Bombe à eau,E.T.,2,3
-Bombe à eau,Les Bronzés,0,4
-Football 3x3,E.T.,30,1
-Football 3x3,Astérix & Obélix,20,2
-Football 3x3,Les Bronzés,10,3
-Football 3x3,Top Yeu,0,4
-Baby-Foot,Top Yeu,6,1
-Baby-Foot,Les Bronzés,0,2
-Baby-Foot,Astérix & Obélix,0,2
-Baby-Foot,E.T.,0,2
-Tournante géante,E.T.,25,1
-Tournante géante,Les Bronzés,20,2
-Tournante géante,Top Yeu,0,3
-Tournante géante,Astérix & Obélix,0,3
-Ventriglisse + Flip Cup,E.T.,25,1
-Ventriglisse + Flip Cup,Top Yeu,12,2
-Ventriglisse + Flip Cup,Les Bronzés,6,3
-Ventriglisse + Flip Cup,Astérix & Obélix,2,4
-Déguisement,Astérix & Obélix,25,1
-Déguisement,Les Bronzés,12,2
-Déguisement,Top Yeu,6,3
-Déguisement,E.T.,2,4
+annee,epreuve,equipe,points,classement
+2025,Volley Ball,Top Yeu,45,1
+2025,Volley Ball,Astérix & Obélix,34,2
+2025,Volley Ball,Les Bronzés,32,3
+2025,Volley Ball,E.T.,13,4
+2025,Football 3x3,E.T.,30,1
+2025,Football 3x3,Astérix & Obélix,20,2
+2025,Football 3x3,Les Bronzés,10,3
+2025,Football 3x3,Top Yeu,0,4
+2024,Pétanque grecque,Salade Grecque,50,1
+2024,Pétanque grecque,Les Spartiates,40,2
+2024,Pétanque grecque,Les Dieux,40,3
+2024,Pétanque grecque,Les Minotaures,30,4
+2024,Course de chars,Salade Grecque,45,1
+2024,Course de chars,Les Spartiates,40,2
+2024,Course de chars,Les Dieux,35,3
+2024,Course de chars,Les Minotaures,30,4

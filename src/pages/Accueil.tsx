@@ -35,6 +35,11 @@ export default function Accueil() {
               </span>
             )}
           </div>
+          {config.theme && (
+            <p className="mt-2 inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">
+              Thème : {config.theme}
+            </p>
+          )}
         </div>
         {config.message_accueil && (
           <p className="px-5 py-4 text-center text-base font-medium text-nuit">
