@@ -4,6 +4,8 @@ import { useData } from '../data/DataContext'
 import { editionsDisputees } from '../data/transform'
 import { PageHeader } from '../components/PageHeader'
 import { ContenuVide } from '../components/states'
+import { Countdown } from '../components/Countdown'
+import { resoudreImage } from '../lib/utils'
 
 /**
  * « La Légende » : le palmarès de toutes les éditions en timeline verticale,
@@ -46,6 +48,7 @@ export default function Legende() {
             {legende.map((edition, i) => {
               const annulee = Boolean(edition.note)
               const estDerniere = derniereDisputee?.annee === edition.annee
+              const photo = resoudreImage(edition.photo)
               return (
                 <motion.li
                   key={edition.annee}
@@ -54,15 +57,30 @@ export default function Legende() {
                   transition={{ delay: i * 0.04 }}
                   className="relative flex items-center gap-3"
                 >
-                  {/* Pastille année / emoji */}
-                  <div
-                    className={`z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl shadow ${
-                      annulee ? 'bg-nuit/10 grayscale' : 'bg-white'
-                    }`}
-                    aria-hidden
-                  >
-                    {edition.emoji}
-                  </div>
+                  {/* Pastille : photo de l'équipe si disponible, sinon emoji */}
+                  {photo && !annulee ? (
+                    <img
+                      src={photo}
+                      alt={`Équipe championne ${edition.annee} : ${edition.champion}`}
+                      loading="lazy"
+                      className={`z-10 h-12 w-12 shrink-0 rounded-full object-cover shadow ${
+                        estDerniere ? 'ring-2 ring-soleil' : 'ring-2 ring-white'
+                      }`}
+                      // Si l'image ne charge pas, on la masque (l'emoji reste en repli via le fond).
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                      }}
+                    />
+                  ) : (
+                    <div
+                      className={`z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl shadow ${
+                        annulee ? 'bg-nuit/10 grayscale' : 'bg-white'
+                      }`}
+                      aria-hidden
+                    >
+                      {edition.emoji}
+                    </div>
+                  )}
 
                   <div
                     className={`carte flex-1 px-4 py-3 ${
@@ -109,6 +127,10 @@ export default function Legende() {
               </p>
               <p className="mt-1 text-2xl font-black">Chapitre {prochainChapitre}</p>
               {prochaineDate && <p className="mt-1 text-sm text-white/90">{prochaineDate}</p>}
+              {/* Compte à rebours (si une date ISO est fournie dans l'onglet Config) */}
+              {(config.prochaine_date_iso || config.prochaine_date) && (
+                <Countdown cibleIso={config.prochaine_date_iso || config.prochaine_date} />
+              )}
               <p className="mt-3 text-base font-medium text-soleil">{prochaineNote}</p>
             </div>
           </motion.div>

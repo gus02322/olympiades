@@ -52,3 +52,33 @@ export function ilYA(ts: number | null, maintenant: number = Date.now()): string
 export function medaille(rang: number): string {
   return rang === 1 ? '🥇' : rang === 2 ? '🥈' : rang === 3 ? '🥉' : '•'
 }
+
+/**
+ * Construit l'URL d'une image à partir d'une valeur du Sheet.
+ * - une URL complète (http/https) est utilisée telle quelle ;
+ * - sinon on considère un chemin relatif au site (ex. « legende/2018.jpg »),
+ *   résolu à partir du dossier `public/` grâce à la base Vite.
+ * Renvoie null si la valeur est vide.
+ */
+export function resoudreImage(valeur: string): string | null {
+  const v = (valeur || '').trim()
+  if (!v) return null
+  if (/^https?:\/\//i.test(v)) return v
+  // BASE_URL vaut « /olympiades/ » en production, « / » en local.
+  return `${import.meta.env.BASE_URL}${v.replace(/^\/+/, '')}`
+}
+
+/**
+ * Décompte entre maintenant et une date cible.
+ * Renvoie jours/heures/minutes/secondes + un booléen « passe » si la date est atteinte.
+ */
+export function decompte(cible: Date, maintenant: number = Date.now()) {
+  const diff = cible.getTime() - maintenant
+  const passe = diff <= 0
+  const total = Math.max(0, diff)
+  const jours = Math.floor(total / 86_400_000)
+  const heures = Math.floor((total % 86_400_000) / 3_600_000)
+  const minutes = Math.floor((total % 3_600_000) / 60_000)
+  const secondes = Math.floor((total % 60_000) / 1000)
+  return { jours, heures, minutes, secondes, passe }
+}

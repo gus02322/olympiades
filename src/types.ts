@@ -72,6 +72,8 @@ export interface LegendeEntry {
   champion: string
   emoji: string
   note: string
+  /** Photo de l'équipe gagnante (URL complète, ou nom de fichier dans public/legende/). */
+  photo: string
 }
 
 /** Ensemble complet des données de l'application. */

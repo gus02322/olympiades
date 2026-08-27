@@ -136,6 +136,7 @@ export function mapLegende(rows: Row[]): LegendeEntry[] {
       champion: texte(row, 'champion', 'vainqueur'),
       emoji: texte(row, 'emoji') || '🏆',
       note: texte(row, 'note'),
+      photo: texte(row, 'photo', 'image', 'url'),
     }))
     .filter((l) => l.annee > 0)
     .sort((a, b) => a.annee - b.annee)

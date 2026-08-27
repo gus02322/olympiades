@@ -109,6 +109,7 @@ export const fallbackData: AppData = {
     couleur_primaire: '#0EA5E9',
     // Clés optionnelles utilisées par l'écran « La Légende » (teaser du prochain chapitre).
     prochaine_edition: 'samedi 14 août 2027',
+    prochaine_date_iso: '2027-08-14', // format AAAA-MM-JJ pour le compte à rebours
     prochaine_note: 'Préparez-vous à écrire le prochain chapitre 💪',
   },
   equipes,
@@ -238,14 +239,14 @@ export const fallbackData: AppData = {
   scores: construireScores(),
   matchs: [...matchsSpike, ...matchsFoot],
   legende: [
-    { annee: 2018, champion: 'Yeullow', emoji: '🏄', note: '' },
-    { annee: 2019, champion: "Belg'Yeu", emoji: '🇧🇪', note: '' },
-    { annee: 2020, champion: 'Copains comme cochons', emoji: '🐷', note: '' },
-    { annee: 2021, champion: '', emoji: '😷', note: 'Annulée — Covid' },
-    { annee: 2022, champion: "Franchou'Yeu", emoji: '🇫🇷', note: '' },
-    { annee: 2023, champion: 'Éléphant Blyeu', emoji: '🐘', note: '' },
-    { annee: 2024, champion: 'Salade Grecque', emoji: '🇬🇷', note: '' },
-    { annee: 2025, champion: 'Astérix & Obélix', emoji: '🛡️', note: '' },
-    { annee: 2026, champion: "Un indien dans l'Île", emoji: '🏹', note: '' },
+    { annee: 2018, champion: 'Yeullow', emoji: '🏄', note: '', photo: '' },
+    { annee: 2019, champion: "Belg'Yeu", emoji: '🇧🇪', note: '', photo: '' },
+    { annee: 2020, champion: 'Copains comme cochons', emoji: '🐷', note: '', photo: '' },
+    { annee: 2021, champion: '', emoji: '😷', note: 'Annulée — Covid', photo: '' },
+    { annee: 2022, champion: "Franchou'Yeu", emoji: '🇫🇷', note: '', photo: '' },
+    { annee: 2023, champion: 'Éléphant Blyeu', emoji: '🐘', note: '', photo: '' },
+    { annee: 2024, champion: 'Salade Grecque', emoji: '🇬🇷', note: '', photo: '' },
+    { annee: 2025, champion: 'Astérix & Obélix', emoji: '🛡️', note: '', photo: '' },
+    { annee: 2026, champion: "Un indien dans l'Île", emoji: '🏹', note: '', photo: '' },
   ],
 }

@@ -151,7 +151,10 @@ Deux colonnes : `cle` et `valeur`. Une info par ligne.
 | `message_accueil` | Chapitre 9 — préparez-vous 💪 |
 | `couleur_primaire` | #0EA5E9 |
 | `prochaine_edition` *(facultatif)* | samedi 13 août 2028 |
+| `prochaine_date_iso` *(facultatif)* | 2028-08-13 |
 | `prochaine_note` *(facultatif)* | Préparez-vous à écrire la suite 💪 |
+
+> ⏳ **Compte à rebours** : renseigne `prochaine_date_iso` au format **`AAAA-MM-JJ`** (ex. `2028-08-13`) pour afficher un compte à rebours J‑H‑M‑S sur la carte « prochain chapitre » de l'écran **La Légende**. Sans cette clé, le compteur ne s'affiche simplement pas.
 
 ### Onglet `Equipes` — les 4 équipes
 | nom | theme | emoji | couleur |
@@ -202,14 +205,18 @@ Utile pour les sports en duel (foot, spike ball, baby-foot…).
 - Si tu ne veux pas gérer les matchs, **laisse cet onglet quasi vide** (juste la ligne de titres) : l'appli fonctionnera très bien sans.
 
 ### Onglet `Legende` — le palmarès de toutes les éditions 🏆
-| annee | champion | emoji | note |
-|-------|----------|-------|------|
-| 2018 | Yeullow | 🏄 | |
-| 2021 | | 😷 | Annulée — Covid |
+| annee | champion | emoji | note | photo |
+|-------|----------|-------|------|-------|
+| 2018 | Yeullow | 🏄 | | legende/2018.jpg |
+| 2021 | | 😷 | Annulée — Covid | |
 
 - Une ligne par année.
 - Pour une année **annulée**, laisse `champion` vide et écris la raison dans `note` (l'appli l'affiche en grisé).
 - Le **numéro du prochain « chapitre »** affiché dans l'appli est calculé automatiquement à partir du nombre d'éditions **réellement disputées** (les années avec une `note` ne comptent pas).
+- `photo` *(facultatif)* : la **photo de l'équipe championne**. Deux options :
+  1. **Dans le dépôt (recommandé)** : dépose l'image dans le dossier **`public/legende/`** de ton projet GitHub (glisser-déposer directement sur github.com : ouvre le dossier `public/legende/`, bouton **« Add file → Upload files »**), puis écris son chemin dans la colonne : `legende/2018.jpg`.
+  2. **Une URL complète** : colle une adresse `https://…` d'une image publique.
+  - Sans photo, l'emoji de l'année s'affiche à la place. Astuce : des images **carrées** (~400×400 px) et légères rendent le mieux.
 
 ---
 
