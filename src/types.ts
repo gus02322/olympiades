@@ -35,6 +35,8 @@ export interface Equipe {
   rang: number | null
   /** Note libre (ex. « Vainqueur de la finale »). */
   note: string
+  /** Photo d'équipe (URL, chemin, ou nom de fichier dans public/equipes/). */
+  photo?: string
 }
 
 /** Un participant (onglet Participants). */

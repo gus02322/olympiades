@@ -100,6 +100,7 @@ export function mapEquipes(rows: Row[]): Equipe[] {
       points_total: nombreOuNull(row, 'points_total'),
       rang: nombreOuNull(row, 'rang'),
       note: texte(row, 'note'),
+      photo: texte(row, 'photo', 'image', 'url'),
     }))
     .filter((e) => e.nom !== '')
 }

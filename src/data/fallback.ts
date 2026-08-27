@@ -132,6 +132,17 @@ const points2024: Record<string, number[]> = {
 const noms2024 = equipes2024.map((e) => e.nom)
 
 /* ------------------------------------------------------------------ */
+/*  Édition 2026 (affiches de films) — les 4 équipes avec photos       */
+/* ------------------------------------------------------------------ */
+
+const equipes2026: Equipe[] = [
+  { annee: 2026, nom: "Un indien dans l'Île", theme: 'Aventure', emoji: '🏹', couleur: '#F97316', points_total: 150, rang: 1, note: '' },
+  { annee: 2026, nom: "L'ayeuture c'est l'aventure", theme: 'Comédie', emoji: '🎬', couleur: '#22C55E', points_total: 135, rang: 2, note: '' },
+  { annee: 2026, nom: 'Les petits jaunes', theme: 'Pastis', emoji: '🍹', couleur: '#FDCB2D', points_total: 120, rang: 3, note: '' },
+  { annee: 2026, nom: 'Les grappes en folie', theme: 'Vendanges', emoji: '🍇', couleur: '#7C3AED', points_total: 95, rang: 4, note: '' },
+]
+
+/* ------------------------------------------------------------------ */
 /*  Config (globale + par année) et Légende (globale)                  */
 /* ------------------------------------------------------------------ */
 
@@ -159,6 +170,13 @@ const configRows: ConfigRow[] = [
   { annee: '2024', cle: 'theme', valeur: 'Grèce antique' },
   { annee: '2024', cle: 'couleur_primaire', valeur: '#06D6A0' },
   { annee: '2024', cle: 'message_accueil', valeur: "Bienvenue aux Yeu'Olympiques antiques ! 🏛️" },
+  // Édition 2026
+  { annee: '2026', cle: 'nom_edition', valeur: 'OlympYeu 2026' },
+  { annee: '2026', cle: 'date', valeur: 'samedi 16 août 2026' },
+  { annee: '2026', cle: 'lieu', valeur: "Île d'Yeu" },
+  { annee: '2026', cle: 'theme', valeur: 'Affiches de films' },
+  { annee: '2026', cle: 'couleur_primaire', valeur: '#F97316' },
+  { annee: '2026', cle: 'message_accueil', valeur: "L'aYEUture c'est l'aventure ! 🎬" },
 ]
 
 const legende: LegendeEntry[] = [
@@ -179,7 +197,7 @@ const legende: LegendeEntry[] = [
 
 export const fallbackData: MultiYearData = {
   configRows,
-  equipes: [...equipes2025, ...equipes2024],
+  equipes: [...equipes2026, ...equipes2025, ...equipes2024],
   participants: [
     // 2025
     ...['Augustin', 'Camille', 'Hugo', 'Léa'].map((nom) => ({ annee: 2025, nom, equipe: 'Top Yeu' })),

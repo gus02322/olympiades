@@ -4,7 +4,7 @@ import { useData } from '../data/DataContext'
 import { classementGeneral, membresEquipe } from '../data/transform'
 import { PageHeader } from '../components/PageHeader'
 import { ContenuVide } from '../components/states'
-import { couleurEquipe, texteSurFond } from '../lib/utils'
+import { couleurEquipe, photoEquipe, texteSurFond } from '../lib/utils'
 
 /** Liste des équipes ; chaque carte mène à la fiche détaillée. */
 export default function Equipes() {
@@ -52,6 +52,16 @@ export default function Equipes() {
                     <p className="truncate text-sm opacity-90">Thème : {equipe.theme}</p>
                   )}
                 </div>
+                {/* Vignette photo d'équipe (masquée si absente) */}
+                <img
+                  src={photoEquipe(equipe.nom, equipe.photo)}
+                  alt=""
+                  loading="lazy"
+                  className="h-12 w-12 shrink-0 rounded-xl object-cover ring-2 ring-white/50"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none'
+                  }}
+                />
                 <ChevronRight className="h-5 w-5 opacity-80" aria-hidden />
               </div>
               <div className="flex items-center justify-between px-4 py-2.5 text-sm text-nuit/70">

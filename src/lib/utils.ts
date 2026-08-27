@@ -68,6 +68,26 @@ export function resoudreImage(valeur: string): string | null {
   return `${import.meta.env.BASE_URL}${v.replace(/^\/+/, '')}`
 }
 
+/** Transforme un texte en identifiant de fichier (minuscules, sans accents, tirets). */
+export function slug(s: string): string {
+  return (s || '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+/**
+ * URL de la photo d'une équipe :
+ * - colonne « photo » du Sheet si fournie (URL ou chemin) ;
+ * - sinon convention automatique « equipes/<slug-du-nom>.jpg »
+ *   (masquée proprement si le fichier n'existe pas).
+ */
+export function photoEquipe(nom: string, photo?: string): string {
+  return resoudreImage(photo || '') ?? `${import.meta.env.BASE_URL}equipes/${slug(nom)}.jpg`
+}
+
 /**
  * Décompte entre maintenant et une date cible.
  * Renvoie jours/heures/minutes/secondes + un booléen « passe » si la date est atteinte.
