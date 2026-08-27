@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import { MapPin, CalendarDays, Trophy } from 'lucide-react'
+import { MapPin, CalendarDays, Trophy, Hourglass } from 'lucide-react'
 import { useData } from '../data/DataContext'
 import { classementGeneral } from '../data/transform'
 import { Podium } from '../components/Podium'
+import { Countdown } from '../components/Countdown'
 import { ContenuVide } from '../components/states'
 
 /** Écran d'accueil : identité de l'édition + podium en direct. */
@@ -41,6 +42,18 @@ export default function Accueil() {
           </p>
         )}
       </section>
+
+      {/* Compte à rebours (si une date ISO est fournie dans l'onglet Config) */}
+      {(config.prochaine_date_iso || config.prochaine_date) && (
+        <section className="carte overflow-hidden">
+          <div className="bg-nuit px-5 py-5 text-center text-white">
+            <p className="flex items-center justify-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-white/70">
+              <Hourglass className="h-4 w-4 text-soleil" aria-hidden /> Compte à rebours
+            </p>
+            <Countdown cibleIso={config.prochaine_date_iso || config.prochaine_date} />
+          </div>
+        </section>
+      )}
 
       {/* Podium en direct */}
       <section className="carte px-4 py-5">
