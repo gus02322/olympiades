@@ -48,7 +48,11 @@ export default function Legende() {
             {legende.map((edition, i) => {
               const annulee = Boolean(edition.note)
               const estDerniere = derniereDisputee?.annee === edition.annee
-              const photo = resoudreImage(edition.photo)
+              // Photo = valeur du Sheet (colonne « photo ») si fournie, sinon
+              // convention automatique « legende/<année>.jpg » (masquée si absente).
+              const photo =
+                resoudreImage(edition.photo) ||
+                (!annulee ? `${import.meta.env.BASE_URL}legende/${edition.annee}.jpg` : null)
               return (
                 <motion.li
                   key={edition.annee}
@@ -57,55 +61,55 @@ export default function Legende() {
                   transition={{ delay: i * 0.04 }}
                   className="relative flex items-center gap-3"
                 >
-                  {/* Pastille : photo de l'équipe si disponible, sinon emoji */}
-                  {photo && !annulee ? (
-                    <img
-                      src={photo}
-                      alt={`Équipe championne ${edition.annee} : ${edition.champion}`}
-                      loading="lazy"
-                      className={`z-10 h-12 w-12 shrink-0 rounded-full object-cover shadow ${
-                        estDerniere ? 'ring-2 ring-soleil' : 'ring-2 ring-white'
-                      }`}
-                      // Si l'image ne charge pas, on la masque (l'emoji reste en repli via le fond).
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none'
-                      }}
-                    />
-                  ) : (
-                    <div
-                      className={`z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl shadow ${
-                        annulee ? 'bg-nuit/10 grayscale' : 'bg-white'
-                      }`}
-                      aria-hidden
-                    >
-                      {edition.emoji}
-                    </div>
-                  )}
+                  {/* Pastille emoji = point de la timeline */}
+                  <div
+                    className={`z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl shadow ${
+                      annulee ? 'bg-nuit/10 grayscale' : 'bg-white'
+                    }`}
+                    aria-hidden
+                  >
+                    {edition.emoji}
+                  </div>
 
                   <div
-                    className={`carte flex-1 px-4 py-3 ${
+                    className={`carte flex flex-1 items-center gap-3 px-4 py-3 ${
                       annulee ? 'opacity-70' : ''
                     } ${estDerniere ? 'ring-2 ring-soleil' : ''}`}
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-bold text-nuit/60">{edition.annee}</span>
-                      {estDerniere && (
-                        <span className="rounded-full bg-soleil/25 px-2 py-0.5 text-[11px] font-bold text-nuit">
-                          Champion en titre
-                        </span>
-                      )}
-                      {annulee && (
-                        <span className="rounded-full bg-nuit/10 px-2 py-0.5 text-[11px] font-semibold text-nuit/60">
-                          Annulée
-                        </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-nuit/60">{edition.annee}</span>
+                        {estDerniere && (
+                          <span className="rounded-full bg-soleil/25 px-2 py-0.5 text-[11px] font-bold text-nuit">
+                            Champion en titre
+                          </span>
+                        )}
+                        {annulee && (
+                          <span className="rounded-full bg-nuit/10 px-2 py-0.5 text-[11px] font-semibold text-nuit/60">
+                            Annulée
+                          </span>
+                        )}
+                      </div>
+                      {annulee ? (
+                        <p className="mt-0.5 text-sm italic text-nuit/60">{edition.note}</p>
+                      ) : (
+                        <p className="mt-0.5 flex items-center gap-1.5 text-base font-extrabold text-nuit">
+                          🏆 {edition.champion}
+                        </p>
                       )}
                     </div>
-                    {annulee ? (
-                      <p className="mt-0.5 text-sm italic text-nuit/60">{edition.note}</p>
-                    ) : (
-                      <p className="mt-0.5 flex items-center gap-1.5 text-base font-extrabold text-nuit">
-                        🏆 {edition.champion}
-                      </p>
+
+                    {/* Photo de l'équipe championne (si fournie) */}
+                    {photo && !annulee && (
+                      <img
+                        src={photo}
+                        alt={`Équipe championne ${edition.annee} : ${edition.champion}`}
+                        loading="lazy"
+                        className="h-16 w-16 shrink-0 rounded-xl object-cover shadow-sm ring-1 ring-nuit/10"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                        }}
+                      />
                     )}
                   </div>
                 </motion.li>
