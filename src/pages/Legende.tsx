@@ -1,10 +1,12 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, Maximize2 } from 'lucide-react'
 import { useData } from '../data/DataContext'
 import { editionsDisputees } from '../data/transform'
 import { PageHeader } from '../components/PageHeader'
 import { ContenuVide } from '../components/states'
 import { Countdown } from '../components/Countdown'
+import { Lightbox } from '../components/Lightbox'
 import { resoudreImage } from '../lib/utils'
 
 /**
@@ -25,6 +27,9 @@ export default function Legende() {
 
   const prochaineDate = config.prochaine_edition || config.prochaine_date || ''
   const prochaineNote = config.prochaine_note || 'Préparez-vous 💪'
+
+  // Image ouverte en plein écran (lightbox), null = fermée.
+  const [zoom, setZoom] = useState<{ src: string; alt: string } | null>(null)
 
   return (
     <div className="animate-pop-in">
@@ -72,11 +77,11 @@ export default function Legende() {
                   </div>
 
                   <div
-                    className={`carte flex flex-1 items-center gap-3 px-4 py-3 ${
+                    className={`carte flex-1 overflow-hidden ${
                       annulee ? 'opacity-70' : ''
                     } ${estDerniere ? 'ring-2 ring-soleil' : ''}`}
                   >
-                    <div className="min-w-0 flex-1">
+                    <div className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold text-nuit/60">{edition.annee}</span>
                         {estDerniere && (
@@ -93,23 +98,41 @@ export default function Legende() {
                       {annulee ? (
                         <p className="mt-0.5 text-sm italic text-nuit/60">{edition.note}</p>
                       ) : (
-                        <p className="mt-0.5 flex items-center gap-1.5 text-base font-extrabold text-nuit">
+                        <p className="mt-0.5 flex items-center gap-1.5 text-lg font-extrabold text-nuit">
                           🏆 {edition.champion}
                         </p>
                       )}
                     </div>
 
-                    {/* Photo de l'équipe championne (si fournie) */}
+                    {/* Grande photo cliquable (plein écran au clic) */}
                     {photo && !annulee && (
-                      <img
-                        src={photo}
-                        alt={`Équipe championne ${edition.annee} : ${edition.champion}`}
-                        loading="lazy"
-                        className="h-16 w-16 shrink-0 rounded-xl object-cover shadow-sm ring-1 ring-nuit/10"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none'
-                        }}
-                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setZoom({
+                            src: photo,
+                            alt: `${edition.annee} — ${edition.champion}`,
+                          })
+                        }
+                        className="group relative block w-full active:opacity-95"
+                        aria-label={`Agrandir la photo ${edition.annee} — ${edition.champion}`}
+                      >
+                        <img
+                          src={photo}
+                          alt={`Équipe championne ${edition.annee} : ${edition.champion}`}
+                          loading="lazy"
+                          className="h-48 w-full object-cover"
+                          onError={(e) => {
+                            // Masque proprement la photo (et son conteneur) si le fichier manque.
+                            const btn = e.currentTarget.parentElement as HTMLElement | null
+                            if (btn) btn.style.display = 'none'
+                          }}
+                        />
+                        {/* Petite icône « agrandir » en surimpression */}
+                        <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/45 px-2 py-1 text-[11px] font-medium text-white">
+                          <Maximize2 className="h-3.5 w-3.5" aria-hidden /> Agrandir
+                        </span>
+                      </button>
                     )}
                   </div>
                 </motion.li>
@@ -140,6 +163,9 @@ export default function Legende() {
           </motion.div>
         </div>
       )}
+
+      {/* Visionneuse plein écran */}
+      <Lightbox src={zoom?.src ?? null} alt={zoom?.alt ?? ''} onClose={() => setZoom(null)} />
     </div>
   )
 }
