@@ -1,6 +1,6 @@
 import type { AppData } from '../types'
 import { epreuvesTriees } from '../data/transform'
-import { couleurEquipe } from '../lib/utils'
+import { afficheEquipe, couleurEquipe } from '../lib/utils'
 
 /**
  * Mini-graphe de l'évolution des points cumulés par équipe, épreuve après épreuve.
@@ -76,7 +76,7 @@ export function EvolutionChart({ data }: { data: AppData }) {
               className="inline-block h-2.5 w-2.5 rounded-full"
               style={{ backgroundColor: couleurEquipe(equipe.couleur) }}
             />
-            {equipe.nom}
+            {afficheEquipe(equipe)}
           </span>
         ))}
       </div>

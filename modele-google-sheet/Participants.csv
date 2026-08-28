@@ -1,17 +1,14 @@
-nom,equipe
-Augustin,Top Yeu
-Camille,Top Yeu
-Hugo,Top Yeu
-Léa,Top Yeu
-Paul,Les Bronzés
-Sarah,Les Bronzés
-Nicolas,Les Bronzés
-Emma,Les Bronzés
-Julien,Astérix & Obélix
-Marine,Astérix & Obélix
-Maxime,Astérix & Obélix
-Clara,Astérix & Obélix
-Pierre,E.T.
-Anaïs,E.T.
-Romain,E.T.
-Élise,E.T.
+annee,nom,equipe
+2025,Augustin,Top Yeu
+2025,Camille,Top Yeu
+2025,Paul,Les Bronzés
+2025,Sarah,Les Bronzés
+2025,Julien,Astérix & Obélix
+2025,Marine,Astérix & Obélix
+2025,Pierre,E.T.
+2025,Anaïs,E.T.
+2024,Augustin,Salade Grecque
+2024,Léa,Salade Grecque
+2024,Paul,Les Spartiates
+2024,Hugo,Les Dieux
+2024,Pierre,Les Minotaures

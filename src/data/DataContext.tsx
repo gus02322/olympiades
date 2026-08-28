@@ -1,13 +1,10 @@
 /**
- * Contexte global de données.
+ * Contexte global de données (MULTI-ANNÉES).
  *
- * Responsabilités :
- *  - lire les 7 onglets du Google Sheet via gviz ;
- *  - rafraîchir automatiquement toutes les 45 s (effet « live ») + bouton manuel ;
- *  - mettre en cache la dernière lecture réussie (localStorage) pour survivre au
- *    mauvais réseau de l'île ;
- *  - exposer des états chargement / erreur soignés ;
- *  - retomber sur les données de démonstration si aucun SHEET_ID n'est configuré.
+ * - lit les 7 onglets du Google Sheet via gviz ;
+ * - conserve toutes les années (MultiYearData) ;
+ * - expose l'année sélectionnée + la vue filtrée (`data`) de cette année ;
+ * - rafraîchissement auto 45 s + bouton manuel, cache localStorage, repli démo.
  */
 
 import {
@@ -15,63 +12,82 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
 } from 'react'
-import { ONGLETS, REFRESH_INTERVAL_MS, SHEET_CONFIGURE, STORAGE_KEY_CACHE } from '../config'
-import type { AppData } from '../types'
+import {
+  ONGLETS,
+  REFRESH_INTERVAL_MS,
+  SHEET_CONFIGURE,
+  STORAGE_KEY_ANNEE,
+  STORAGE_KEY_CACHE,
+} from '../config'
+import type { AppData, MultiYearData } from '../types'
 import { lireOnglet } from './gviz'
 import { assembler } from './mappers'
+import { anneeDefaut, anneesDisponibles, filtrerParAnnee } from './transform'
 import { fallbackData } from './fallback'
 
-/** Origine des données actuellement affichées. */
 export type Source = 'demo' | 'live' | 'cache'
 
 interface DataState {
+  /** Vue filtrée de l'année sélectionnée (config résolue, listes de l'année, légende globale). */
   data: AppData
-  /** true pendant le tout premier chargement (avant toute donnée). */
+  /** Toutes les années disponibles (récent → ancien). */
+  annees: number[]
+  /** Année sélectionnée. */
+  annee: number
+  /** Change l'année (mémorisée en localStorage). */
+  setAnnee: (a: number) => void
   chargementInitial: boolean
-  /** true pendant un rafraîchissement (données déjà affichées). */
   rafraichissement: boolean
-  /** Message d'erreur du dernier essai réseau, s'il y en a un. */
   erreur: string | null
-  /** D'où viennent les données affichées. */
   source: Source
-  /** Horodatage (ms) de la dernière lecture réussie. */
   derniereMaj: number | null
-  /** Force un rafraîchissement manuel. */
   rafraichir: () => void
 }
 
 const DataContext = createContext<DataState | null>(null)
 
-/** Lecture du cache localStorage (dernière lecture réussie). */
-function lireCache(): { data: AppData; ts: number } | null {
+/** Le cache est-il un MultiYearData exploitable ? */
+function estMultiYear(x: unknown): x is MultiYearData {
+  return !!x && typeof x === 'object' && Array.isArray((x as MultiYearData).configRows)
+}
+
+function lireCache(): { data: MultiYearData; ts: number } | null {
   try {
     const brut = localStorage.getItem(STORAGE_KEY_CACHE)
     if (!brut) return null
-    const parsed = JSON.parse(brut) as { data: AppData; ts: number }
-    if (!parsed?.data) return null
-    return parsed
+    const parsed = JSON.parse(brut) as { data: unknown; ts: number }
+    if (!estMultiYear(parsed?.data)) return null // ignore un ancien cache mono-année
+    return { data: parsed.data, ts: parsed.ts }
   } catch {
     return null
   }
 }
 
-/** Écriture du cache localStorage. */
-function ecrireCache(data: AppData, ts: number): void {
+function ecrireCache(data: MultiYearData, ts: number): void {
   try {
     localStorage.setItem(STORAGE_KEY_CACHE, JSON.stringify({ data, ts }))
   } catch {
-    // Quota plein ou navigation privée : on ignore silencieusement.
+    /* quota / navigation privée : on ignore */
+  }
+}
+
+function lireAnneeStockee(): number | null {
+  try {
+    const v = Number(localStorage.getItem(STORAGE_KEY_ANNEE))
+    return Number.isFinite(v) && v > 0 ? v : null
+  } catch {
+    return null
   }
 }
 
 export function DataProvider({ children }: { children: ReactNode }) {
-  // État initial : cache s'il existe, sinon données de démonstration.
   const cacheInitial = lireCache()
-  const [data, setData] = useState<AppData>(cacheInitial?.data ?? fallbackData)
+  const [raw, setRaw] = useState<MultiYearData>(cacheInitial?.data ?? fallbackData)
   const [source, setSource] = useState<Source>(
     cacheInitial ? 'cache' : SHEET_CONFIGURE ? 'live' : 'demo',
   )
@@ -80,22 +96,40 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [rafraichissement, setRafraichissement] = useState<boolean>(false)
   const [erreur, setErreur] = useState<string | null>(null)
 
-  // Empêche deux lectures simultanées.
+  // Année sélectionnée (null = « pas encore choisie », on prendra le défaut).
+  const [anneeChoisie, setAnneeChoisie] = useState<number | null>(lireAnneeStockee)
+
+  const annees = useMemo(() => anneesDisponibles(raw), [raw])
+
+  // Année effective : choix valide sinon année par défaut.
+  const annee = useMemo(() => {
+    if (anneeChoisie && annees.includes(anneeChoisie)) return anneeChoisie
+    return anneeDefaut(raw, annees)
+  }, [anneeChoisie, annees, raw])
+
+  const setAnnee = useCallback((a: number) => {
+    setAnneeChoisie(a)
+    try {
+      localStorage.setItem(STORAGE_KEY_ANNEE, String(a))
+    } catch {
+      /* ignore */
+    }
+  }, [])
+
+  // Vue filtrée pour l'année courante.
+  const data = useMemo(() => filtrerParAnnee(raw, annee), [raw, annee])
+
   const enCours = useRef(false)
 
   const charger = useCallback(async () => {
-    // Sans SHEET_ID, on reste sur la démo (pas d'appel réseau).
     if (!SHEET_CONFIGURE) {
       setChargementInitial(false)
       return
     }
     if (enCours.current) return
     enCours.current = true
-
-    // Premier chargement vs rafraîchissement.
     setRafraichissement(true)
     try {
-      // On lit tous les onglets en parallèle. Les onglets optionnels ne bloquent pas.
       const [config, equipes, participants, epreuves, scores, matchs, legende] =
         await Promise.all([
           lireOnglet(ONGLETS.config).catch(() => []),
@@ -103,7 +137,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
           lireOnglet(ONGLETS.participants).catch(() => []),
           lireOnglet(ONGLETS.epreuves).catch(() => []),
           lireOnglet(ONGLETS.scores).catch(() => []),
-          lireOnglet(ONGLETS.matchs).catch(() => []), // optionnel
+          lireOnglet(ONGLETS.matchs).catch(() => []),
           lireOnglet(ONGLETS.legende).catch(() => []),
         ])
 
@@ -117,23 +151,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
         legende,
       })
 
-      // Si le Sheet ne renvoie strictement rien d'exploitable, on garde ce qu'on a.
-      const totalLignes =
-        equipes.length + epreuves.length + scores.length + legende.length
-      if (totalLignes === 0) {
-        throw new Error('Le Google Sheet semble vide ou inaccessible.')
-      }
+      const totalLignes = equipes.length + epreuves.length + scores.length + legende.length
+      if (totalLignes === 0) throw new Error('Le Google Sheet semble vide ou inaccessible.')
 
       const ts = Date.now()
-      setData(assemblee)
+      setRaw(assemblee)
       setSource('live')
       setDerniereMaj(ts)
       setErreur(null)
       ecrireCache(assemblee, ts)
     } catch (e) {
-      // Échec réseau : on conserve l'affichage courant (cache ou démo) et on note l'erreur.
-      const message = e instanceof Error ? e.message : 'Erreur de lecture inconnue.'
-      setErreur(message)
+      setErreur(e instanceof Error ? e.message : 'Erreur de lecture inconnue.')
     } finally {
       setChargementInitial(false)
       setRafraichissement(false)
@@ -141,12 +169,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  // Premier chargement + timer de rafraîchissement automatique.
   useEffect(() => {
     charger()
     if (!SHEET_CONFIGURE) return
     const id = setInterval(charger, REFRESH_INTERVAL_MS)
-    // On rafraîchit aussi quand l'utilisateur revient sur l'onglet/app.
     const onFocus = () => charger()
     window.addEventListener('focus', onFocus)
     return () => {
@@ -157,6 +183,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const valeur: DataState = {
     data,
+    annees,
+    annee,
+    setAnnee,
     chargementInitial,
     rafraichissement,
     erreur,
@@ -168,7 +197,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
   return <DataContext.Provider value={valeur}>{children}</DataContext.Provider>
 }
 
-/** Hook d'accès aux données. À utiliser dans les pages/composants. */
 export function useData(): DataState {
   const ctx = useContext(DataContext)
   if (!ctx) throw new Error('useData doit être utilisé dans <DataProvider>.')

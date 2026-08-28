@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { BottomNav } from './components/BottomNav'
 import { RefreshIndicator } from './components/RefreshIndicator'
+import { YearSelector } from './components/YearSelector'
 import { BandeauErreur, Chargement } from './components/states'
 import { useData } from './data/DataContext'
 import Accueil from './pages/Accueil'
@@ -24,6 +25,8 @@ export default function App() {
             <span className="flex items-center gap-1.5 text-sm font-extrabold tracking-tight text-nuit">
               <span aria-hidden>🏝️</span> OlympYeu
             </span>
+            {/* Sélecteur d'édition (année), accessible depuis tous les écrans */}
+            <YearSelector />
           </div>
           <div className="mt-1">
             <RefreshIndicator />

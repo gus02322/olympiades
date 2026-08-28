@@ -140,76 +140,90 @@ C'est la longue suite de lettres et chiffres **entre `/d/` et `/edit`**.
 > Règle d'or : **garde la première ligne (les titres de colonnes) telle quelle.** Les lignes suivantes sont tes données.
 > L'appli est **tolérante** : si une colonne facultative est vide ou absente, elle continue de fonctionner.
 
-### Onglet `Config` — les infos générales de l'édition
-Deux colonnes : `cle` et `valeur`. Une info par ligne.
+> 📅 **Plusieurs éditions dans un seul document.** Tous les onglets (sauf `Legende`) ont une colonne **`annee`** en première position. Tu ajoutes autant d'éditions que tu veux dans le même Sheet : un **sélecteur d'année** apparaît en haut de l'appli et filtre tous les écrans. `Legende` reste **global** (le palmarès de toutes les années).
 
-| cle | valeur (exemple) |
-|-----|------------------|
-| `nom_edition` | OlympYeu 2027 |
-| `date` | samedi 14 août 2027 |
-| `lieu` | Île d'Yeu |
-| `message_accueil` | Chapitre 9 — préparez-vous 💪 |
-| `couleur_primaire` | #0EA5E9 |
-| `prochaine_edition` *(facultatif)* | samedi 13 août 2028 |
-| `prochaine_note` *(facultatif)* | Préparez-vous à écrire la suite 💪 |
+### Onglet `Config` — les infos générales, par édition
+Trois colonnes : `annee`, `cle`, `valeur`. Une info par ligne.
+- **Ligne globale** = `annee` **vide** (vaut pour toutes les éditions).
+- **Ligne d'édition** = `annee` renseignée (ex. `2025`).
 
-### Onglet `Equipes` — les 4 équipes
-| nom | theme | emoji | couleur |
-|-----|-------|-------|---------|
-| Top Yeu | USA | 🦅 | #EF476F |
+| annee | cle | valeur (exemple) |
+|-------|-----|------------------|
+| *(vide)* | `annee_defaut` | 2025 |
+| *(vide)* | `prochaine_edition` | samedi 14 août 2027 |
+| *(vide)* | `prochaine_date_iso` | 2027-08-14 |
+| *(vide)* | `prochaine_note` | Préparez-vous à écrire la suite 💪 |
+| 2025 | `nom_edition` | OlympYeu 2025 |
+| 2025 | `date` | samedi 16 août 2025 |
+| 2025 | `lieu` | Île d'Yeu |
+| 2025 | `theme` | Cinéma & BD |
+| 2025 | `couleur_primaire` | #0EA5E9 |
+| 2025 | `message_accueil` | Que la fête commence ! |
 
-- `nom` : le nom de l'équipe (sert de référence dans les autres onglets — écris-le **toujours de la même façon**).
-- `theme` : le thème/pays de déguisement.
-- `emoji` : un emoji d'équipe (copie-colle depuis ton clavier emoji).
-- `couleur` : un code couleur **hexadécimal** (`#` + 6 caractères). Trouves-en un sur [htmlcolorcodes.com](https://htmlcolorcodes.com/fr/).
+- `annee_defaut` *(global)* : l'édition affichée au premier lancement (sinon la plus récente).
+- ⏳ **Compte à rebours** : `prochaine_date_iso` au format **`AAAA-MM-JJ`** affiche un compteur J‑H‑M‑S (Accueil + La Légende). Sans cette clé, pas de compteur.
+
+### Onglet `Equipes` — les équipes de chaque édition
+| annee | nom | theme | emoji | couleur | points_total | rang | note |
+|-------|-----|-------|-------|---------|--------------|------|------|
+| 2025 | Astérix & Obélix | Égypte | 🛡️ | #06D6A0 | *(vide)* | 1 | 🏆 Vainqueur de la finale |
+
+- `nom` : sert de référence dans les autres onglets (`Scores`, `Participants`, `Matchs`) — écris-le **toujours pareil**.
+- `nom_affiche` *(facultatif)* : le nom **affiché** dans l'appli s'il diffère du `nom` interne. Pratique si tes équipes sont désignées par une couleur dans le Sheet (ex. `nom` = « Orange ») mais que tu veux montrer un joli nom (ex. `nom_affiche` = « Un indien dans l'Île »). Les scores continuent d'utiliser `nom`, donc rien ne casse.
+- `theme` / `emoji` / `couleur` (hex `#` + 6 caractères, via [htmlcolorcodes.com](https://htmlcolorcodes.com/fr/)).
+- `points_total` *(facultatif)* : total imposé. **Si vide**, l'appli **additionne les `Scores`**.
+- `rang` *(facultatif)* : classement imposé (1 = champion). **Si rempli**, il fixe l'ordre du podium — même si une autre équipe a plus de points (finale décisive). **Si vide**, l'ordre suit le total.
+- `note` *(facultatif)* : petit badge affiché sous l'équipe (ex. « 🏆 Vainqueur de la finale »).
 
 ### Onglet `Participants` — qui est dans quelle équipe
-| nom | equipe |
-|-----|--------|
-| Augustin | Top Yeu |
+| annee | nom | equipe |
+|-------|-----|--------|
+| 2025 | Augustin | Top Yeu |
 
-- `equipe` doit correspondre **exactement** à un `nom` d'équipe de l'onglet `Equipes`.
+- `equipe` doit correspondre **exactement** à un `nom` d'équipe de la **même année**.
 
-### Onglet `Epreuves` — le programme de la journée
-| ordre | nom | horaire | duree | lieu | format | regles | systeme_points |
-|-------|-----|---------|-------|------|--------|--------|----------------|
-| 1 | Volley Ball | 10h00 - 11h00 | 1h | Plage | Tous ensemble | … | Match en 10 pts… |
+### Onglet `Epreuves` — le programme de chaque édition
+| annee | ordre | nom | horaire | duree | lieu | format | regles | systeme_points |
+|-------|-------|-----|---------|-------|------|--------|--------|----------------|
+| 2025 | 1 | Volley Ball | 10h00 - 11h00 | 1h | Plage | Tous ensemble | … | Match en 10 pts… |
 
-- `ordre` : un nombre, sert à **trier** les épreuves dans le programme.
-- Les autres colonnes sont du texte libre. `regles` et `systeme_points` peuvent être longs.
+- `ordre` : un nombre, sert à **trier** les épreuves. Le reste est du texte libre.
 
 ### Onglet `Scores` — le cœur du jour J ⭐
 C'est **ce que tu remplis au fil de la journée**.
 
-| epreuve | equipe | points | classement |
-|---------|--------|--------|-----------|
-| Volley Ball | Top Yeu | 45 | 1 |
+| annee | epreuve | equipe | points | classement |
+|-------|---------|--------|--------|-----------|
+| 2025 | Volley Ball | Top Yeu | 45 | 1 |
 
-- `epreuve` = un `nom` de l'onglet `Epreuves`. `equipe` = un `nom` de l'onglet `Equipes`.
-- `points` : le nombre de points gagnés par cette équipe **sur cette épreuve**.
-- `classement` *(facultatif)* : le rang de l'équipe **sur cette épreuve** (1, 2, 3, 4).
+- `epreuve` = un `nom` de `Epreuves`, `equipe` = un `nom` de `Equipes` (même année).
+- `points` : points gagnés **sur cette épreuve**. `classement` *(facultatif)* : rang sur l'épreuve.
 
-> 🧮 **Le classement général est calculé automatiquement par l'appli** en additionnant les `points` de chaque équipe sur toutes les épreuves. Tu n'as **pas** à faire le total toi-même.
+> 🧮 **Le total d'une équipe** = sa colonne `points_total` si remplie, **sinon la somme de ses `Scores`**. L'ordre du classement suit la colonne `rang` si elle est remplie, sinon le total.
 
 ### Onglet `Matchs` *(facultatif)* — les confrontations / poules
 Utile pour les sports en duel (foot, spike ball, baby-foot…).
 
-| epreuve | equipeA | equipeB | horaire | terrain | scoreA | scoreB | statut |
-|---------|---------|---------|---------|---------|--------|--------|--------|
-| Football 3x3 | Top Yeu | E.T. | 14h50 | Terrain de foot | 0 | 1 | terminé |
+| annee | epreuve | equipeA | equipeB | horaire | terrain | scoreA | scoreB | statut |
+|-------|---------|---------|---------|---------|---------|--------|--------|--------|
+| 2025 | Football 3x3 | Top Yeu | E.T. | 14h50 | Terrain de foot | 0 | 1 | terminé |
 
 - `statut` : `à venir`, `en cours` ou `terminé` (colore l'affichage).
 - Si tu ne veux pas gérer les matchs, **laisse cet onglet quasi vide** (juste la ligne de titres) : l'appli fonctionnera très bien sans.
 
 ### Onglet `Legende` — le palmarès de toutes les éditions 🏆
-| annee | champion | emoji | note |
-|-------|----------|-------|------|
-| 2018 | Yeullow | 🏄 | |
-| 2021 | | 😷 | Annulée — Covid |
+| annee | champion | emoji | note | photo |
+|-------|----------|-------|------|-------|
+| 2018 | Yeullow | 🏄 | | legende/2018.jpg |
+| 2021 | | 😷 | Annulée — Covid | |
 
 - Une ligne par année.
 - Pour une année **annulée**, laisse `champion` vide et écris la raison dans `note` (l'appli l'affiche en grisé).
 - Le **numéro du prochain « chapitre »** affiché dans l'appli est calculé automatiquement à partir du nombre d'éditions **réellement disputées** (les années avec une `note` ne comptent pas).
+- `photo` *(facultatif)* : la **photo de l'équipe championne**. Deux options :
+  1. **Dans le dépôt (recommandé)** : dépose l'image dans le dossier **`public/legende/`** de ton projet GitHub (glisser-déposer directement sur github.com : ouvre le dossier `public/legende/`, bouton **« Add file → Upload files »**), puis écris son chemin dans la colonne : `legende/2018.jpg`.
+  2. **Une URL complète** : colle une adresse `https://…` d'une image publique.
+  - Sans photo, l'emoji de l'année s'affiche à la place. Astuce : des images **carrées** (~400×400 px) et légères rendent le mieux.
 
 ---
 
@@ -288,3 +302,7 @@ La réponse est du JSONP (`google.visualization.Query.setResponse({...})`) : `sr
 ---
 
 Fait avec ☀️ pour l'Île d'Yeu. Bonne olympiade !
+
+<!-- redeploy: 2026-08-27T14:45:03Z -->
+
+<!-- redeploy: 2026-08-27T14:56:57Z -->

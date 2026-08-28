@@ -1,17 +1,16 @@
 /**
- * Conversion des lignes brutes (issues de gviz) vers les types de l'application.
- * Tout est tolérant : si une colonne optionnelle manque, on met une valeur par défaut
- * plutôt que de planter.
+ * Conversion des lignes brutes (gviz) vers les types de l'application (multi-années).
+ * Tout est tolérant : colonne/valeur manquante → valeur par défaut, jamais de crash.
  */
 
 import type {
-  AppData,
-  ConfigEntry,
+  ConfigRow,
   EditionConfig,
   Epreuve,
   Equipe,
   LegendeEntry,
   Match,
+  MultiYearData,
   Participant,
   Score,
 } from '../types'
@@ -19,7 +18,7 @@ import { normaliserCle } from './gviz'
 
 type Row = Record<string, string | number>
 
-/** Récupère une valeur texte d'une ligne, quelle que soit la casse/accentuation de la clé. */
+/** Valeur texte d'une ligne, quelle que soit la casse/accentuation de la clé. */
 function texte(row: Row, ...cles: string[]): string {
   for (const cle of cles) {
     const k = normaliserCle(cle)
@@ -28,7 +27,7 @@ function texte(row: Row, ...cles: string[]): string {
   return ''
 }
 
-/** Récupère un nombre d'une ligne (accepte les virgules décimales), sinon `defaut`. */
+/** Nombre d'une ligne (accepte virgule décimale), sinon `defaut`. */
 function nombre(row: Row, cle: string, defaut = 0): number {
   const k = normaliserCle(cle)
   const v = row[k]
@@ -38,7 +37,7 @@ function nombre(row: Row, cle: string, defaut = 0): number {
   return Number.isFinite(n) ? n : defaut
 }
 
-/** Récupère un nombre ou null si la cellule est vide. */
+/** Nombre d'une ligne ou null si la cellule est vide. */
 function nombreOuNull(row: Row, cle: string): number | null {
   const k = normaliserCle(cle)
   const v = row[k]
@@ -48,21 +47,44 @@ function nombreOuNull(row: Row, cle: string): number | null {
   return Number.isFinite(n) ? n : null
 }
 
-/** Onglet Config → objet clé/valeur exploitable. */
-export function mapConfig(rows: Row[]): EditionConfig {
+/** Année d'une ligne (0 si vide/absente = ligne globale). */
+function annee(row: Row): number {
+  return nombre(row, 'annee', 0)
+}
+
+/** Onglet Config → lignes { annee, cle, valeur }. */
+export function mapConfigRows(rows: Row[]): ConfigRow[] {
+  return rows
+    .map((row) => ({
+      annee: texte(row, 'annee', 'année'),
+      cle: texte(row, 'cle', 'clé', 'key'),
+      valeur: texte(row, 'valeur', 'value'),
+    }))
+    .filter((r) => r.cle !== '')
+}
+
+/**
+ * Résout la Config pour une année donnée :
+ * base = lignes globales (annee vide), surchargée par les lignes de l'année.
+ */
+export function resoudreConfig(configRows: ConfigRow[], anneeCible: number): EditionConfig {
   const base: EditionConfig = {
     nom_edition: '',
     date: '',
     lieu: '',
     message_accueil: '',
     couleur_primaire: '',
+    theme: '',
   }
-  for (const row of rows) {
-    const entry: ConfigEntry = {
-      cle: texte(row, 'cle', 'clé', 'key'),
-      valeur: texte(row, 'valeur', 'value'),
+  // 1) lignes globales
+  for (const r of configRows) {
+    if (r.annee.trim() === '') base[normaliserCle(r.cle)] = r.valeur
+  }
+  // 2) surcharge par l'année choisie
+  for (const r of configRows) {
+    if (r.annee.trim() !== '' && Number(r.annee) === anneeCible) {
+      base[normaliserCle(r.cle)] = r.valeur
     }
-    if (entry.cle) base[normaliserCle(entry.cle)] = entry.valeur
   }
   return base
 }
@@ -70,10 +92,16 @@ export function mapConfig(rows: Row[]): EditionConfig {
 export function mapEquipes(rows: Row[]): Equipe[] {
   return rows
     .map((row) => ({
+      annee: annee(row),
       nom: texte(row, 'nom', 'equipe', 'équipe'),
+      nomAffiche: texte(row, 'nom_affiche', 'nom_affichage', 'affichage', 'nom_equipe'),
       theme: texte(row, 'theme', 'thème'),
       emoji: texte(row, 'emoji') || '🏳️',
       couleur: texte(row, 'couleur', 'color') || '#0EA5E9',
+      points_total: nombreOuNull(row, 'points_total'),
+      rang: nombreOuNull(row, 'rang'),
+      note: texte(row, 'note'),
+      photo: texte(row, 'photo', 'image', 'url'),
     }))
     .filter((e) => e.nom !== '')
 }
@@ -81,6 +109,7 @@ export function mapEquipes(rows: Row[]): Equipe[] {
 export function mapParticipants(rows: Row[]): Participant[] {
   return rows
     .map((row) => ({
+      annee: annee(row),
       nom: texte(row, 'nom', 'prenom', 'prénom'),
       equipe: texte(row, 'equipe', 'équipe'),
     }))
@@ -90,6 +119,7 @@ export function mapParticipants(rows: Row[]): Participant[] {
 export function mapEpreuves(rows: Row[]): Epreuve[] {
   return rows
     .map((row, i) => ({
+      annee: annee(row),
       ordre: nombre(row, 'ordre', i + 1),
       nom: texte(row, 'nom', 'epreuve', 'épreuve'),
       horaire: texte(row, 'horaire'),
@@ -100,12 +130,12 @@ export function mapEpreuves(rows: Row[]): Epreuve[] {
       systeme_points: texte(row, 'systeme_points', 'système_points', 'systeme points'),
     }))
     .filter((e) => e.nom !== '')
-    .sort((a, b) => a.ordre - b.ordre)
 }
 
 export function mapScores(rows: Row[]): Score[] {
   return rows
     .map((row) => ({
+      annee: annee(row),
       epreuve: texte(row, 'epreuve', 'épreuve'),
       equipe: texte(row, 'equipe', 'équipe'),
       points: nombre(row, 'points', 0),
@@ -117,6 +147,7 @@ export function mapScores(rows: Row[]): Score[] {
 export function mapMatchs(rows: Row[]): Match[] {
   return rows
     .map((row) => ({
+      annee: annee(row),
       epreuve: texte(row, 'epreuve', 'épreuve'),
       equipeA: texte(row, 'equipeA', 'equipe_a', 'équipea'),
       equipeB: texte(row, 'equipeB', 'equipe_b', 'équipeb'),
@@ -136,12 +167,13 @@ export function mapLegende(rows: Row[]): LegendeEntry[] {
       champion: texte(row, 'champion', 'vainqueur'),
       emoji: texte(row, 'emoji') || '🏆',
       note: texte(row, 'note'),
+      photo: texte(row, 'photo', 'image', 'url'),
     }))
     .filter((l) => l.annee > 0)
     .sort((a, b) => a.annee - b.annee)
 }
 
-/** Assemble un objet AppData à partir des lignes brutes de chaque onglet. */
+/** Assemble les données brutes multi-années à partir des lignes de chaque onglet. */
 export function assembler(raw: {
   config: Row[]
   equipes: Row[]
@@ -150,9 +182,9 @@ export function assembler(raw: {
   scores: Row[]
   matchs: Row[]
   legende: Row[]
-}): AppData {
+}): MultiYearData {
   return {
-    config: mapConfig(raw.config),
+    configRows: mapConfigRows(raw.config),
     equipes: mapEquipes(raw.equipes),
     participants: mapParticipants(raw.participants),
     epreuves: mapEpreuves(raw.epreuves),

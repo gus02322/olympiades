@@ -1,5 +1,5 @@
 import type { Equipe } from '../types'
-import { couleurEquipe, cx, texteSurFond } from '../lib/utils'
+import { afficheEquipe, couleurEquipe, cx, texteSurFond } from '../lib/utils'
 
 /** Pastille colorée représentant une équipe (emoji + nom). */
 export function TeamBadge({
@@ -24,7 +24,7 @@ export function TeamBadge({
       style={{ backgroundColor: fond, color: texte }}
     >
       <span aria-hidden>{equipe.emoji}</span>
-      <span>{equipe.nom}</span>
+      <span>{afficheEquipe(equipe)}</span>
     </span>
   )
 }

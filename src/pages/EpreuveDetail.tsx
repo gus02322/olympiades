@@ -3,7 +3,7 @@ import { ArrowLeft, Clock, MapPin, Users2, BookOpen, Target, Swords } from 'luci
 import { useData } from '../data/DataContext'
 import { matchsParEpreuve, scoresParEpreuve, trouverEquipe } from '../data/transform'
 import { ContenuVide } from '../components/states'
-import { medaille } from '../lib/utils'
+import { afficheNom, medaille } from '../lib/utils'
 import type { Match } from '../types'
 
 /** Détail d'une épreuve : infos, règles, système de points, résultats et confrontations. */
@@ -102,7 +102,7 @@ export default function EpreuveDetail() {
                   <span className="text-lg" aria-hidden>
                     {eq?.emoji ?? '•'}
                   </span>
-                  <span className="flex-1 font-medium text-nuit">{s.equipe}</span>
+                  <span className="flex-1 font-medium text-nuit">{afficheNom(data.equipes, s.equipe)}</span>
                   <span className="font-bold text-nuit">{s.points} pts</span>
                 </li>
               )
@@ -149,13 +149,13 @@ function MatchLigne({ match, data }: { match: Match; data: ReturnType<typeof use
     <li className="px-4 py-3">
       <div className="flex items-center gap-2">
         <span className={`flex-1 text-right text-sm ${aGagne ? 'font-bold text-nuit' : 'text-nuit/70'}`}>
-          {a?.emoji} {match.equipeA}
+          {a?.emoji} {afficheNom(data.equipes, match.equipeA)}
         </span>
         <span className="min-w-[3.5rem] rounded-lg bg-nuit/5 px-2 py-0.5 text-center text-sm font-bold text-nuit">
           {aScore !== null && bScore !== null ? `${aScore} – ${bScore}` : 'vs'}
         </span>
         <span className={`flex-1 text-sm ${bGagne ? 'font-bold text-nuit' : 'text-nuit/70'}`}>
-          {match.equipeB} {b?.emoji}
+          {afficheNom(data.equipes, match.equipeB)} {b?.emoji}
         </span>
       </div>
       <div className="mt-1 flex items-center justify-center gap-2 text-[11px] text-nuit/50">

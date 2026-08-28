@@ -1,8 +1,10 @@
-import { Users } from 'lucide-react'
+import { useState } from 'react'
+import { Maximize2, Users } from 'lucide-react'
 import type { AppData, Equipe } from '../types'
 import { classementGeneral, epreuvesTriees, membresEquipe, scoreEquipeEpreuve } from '../data/transform'
-import { couleurEquipe, medaille, texteSurFond } from '../lib/utils'
+import { afficheEquipe, couleurEquipe, medaille, photoEquipe, texteSurFond } from '../lib/utils'
 import { ContenuVide } from './states'
+import { Lightbox } from './Lightbox'
 
 /**
  * Fiche détaillée d'une équipe : thème, couleur, membres, total,
@@ -25,6 +27,9 @@ export function EquipeFiche({
   const rangs = classementGeneral(data.equipes, data.scores)
   const monRang = rangs.find((r) => r.equipe.nom === equipe.nom)
   const epreuves = epreuvesTriees(data.epreuves)
+  const photo = photoEquipe(equipe.nom, equipe.photo)
+  const nomAff = afficheEquipe(equipe)
+  const [zoom, setZoom] = useState(false)
 
   return (
     <div className="space-y-4">
@@ -36,7 +41,7 @@ export function EquipeFiche({
               {equipe.emoji}
             </span>
             <div>
-              <h2 className="text-2xl font-extrabold leading-tight">{equipe.nom}</h2>
+              <h2 className="text-2xl font-extrabold leading-tight">{nomAff}</h2>
               {equipe.theme && <p className="text-sm opacity-90">Thème : {equipe.theme}</p>}
             </div>
           </div>
@@ -55,7 +60,41 @@ export function EquipeFiche({
               </div>
             )}
           </div>
+          {/* Note éventuelle de l'équipe (ex. vainqueur de la finale) */}
+          {equipe.note && (
+            <p
+              className="mt-3 inline-block rounded-full px-3 py-1 text-sm font-semibold"
+              style={{ backgroundColor: 'rgba(255,255,255,0.22)', color: couleurTexte }}
+            >
+              {equipe.note}
+            </p>
+          )}
         </div>
+      </section>
+
+      {/* Photo d'équipe (cliquable → plein écran) */}
+      <section className="carte overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setZoom(true)}
+          className="group relative block w-full active:opacity-95"
+          aria-label={`Agrandir la photo de ${nomAff}`}
+        >
+          <img
+            src={photo}
+            alt={`Équipe ${nomAff}`}
+            loading="lazy"
+            className="h-56 w-full object-cover"
+            onError={(e) => {
+              // Pas de photo → on masque toute la section proprement.
+              const section = e.currentTarget.closest('section') as HTMLElement | null
+              if (section) section.style.display = 'none'
+            }}
+          />
+          <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/45 px-2 py-1 text-[11px] font-medium text-white">
+            <Maximize2 className="h-3.5 w-3.5" aria-hidden /> Agrandir
+          </span>
+        </button>
       </section>
 
       {/* Membres */}
@@ -117,6 +156,9 @@ export function EquipeFiche({
           </ul>
         )}
       </section>
+
+      {/* Visionneuse plein écran de la photo d'équipe */}
+      <Lightbox src={zoom ? photo : null} alt={nomAff} onClose={() => setZoom(false)} />
     </div>
   )
 }

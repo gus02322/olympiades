@@ -39,6 +39,9 @@ export const REFRESH_INTERVAL_MS = 45_000
 /** Clé utilisée pour mémoriser le prénom choisi dans « Mon équipe ». */
 export const STORAGE_KEY_PRENOM = 'olympyeu:prenom'
 
+/** Clé utilisée pour mémoriser l'année sélectionnée (sélecteur d'édition). */
+export const STORAGE_KEY_ANNEE = 'olympyeu:annee'
+
 /** Préfixe des clés de cache d'affichage (dernière lecture réussie du Sheet). */
 export const STORAGE_KEY_CACHE = 'olympyeu:cache'
 
