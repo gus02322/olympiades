@@ -94,6 +94,7 @@ export function mapEquipes(rows: Row[]): Equipe[] {
     .map((row) => ({
       annee: annee(row),
       nom: texte(row, 'nom', 'equipe', 'équipe'),
+      nomAffiche: texte(row, 'nom_affiche', 'nom_affichage', 'affichage', 'nom_equipe'),
       theme: texte(row, 'theme', 'thème'),
       emoji: texte(row, 'emoji') || '🏳️',
       couleur: texte(row, 'couleur', 'color') || '#0EA5E9',

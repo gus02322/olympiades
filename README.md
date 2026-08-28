@@ -168,7 +168,8 @@ Trois colonnes : `annee`, `cle`, `valeur`. Une info par ligne.
 |-------|-----|-------|-------|---------|--------------|------|------|
 | 2025 | Astérix & Obélix | Égypte | 🛡️ | #06D6A0 | *(vide)* | 1 | 🏆 Vainqueur de la finale |
 
-- `nom` : sert de référence dans les autres onglets — écris-le **toujours pareil**.
+- `nom` : sert de référence dans les autres onglets (`Scores`, `Participants`, `Matchs`) — écris-le **toujours pareil**.
+- `nom_affiche` *(facultatif)* : le nom **affiché** dans l'appli s'il diffère du `nom` interne. Pratique si tes équipes sont désignées par une couleur dans le Sheet (ex. `nom` = « Orange ») mais que tu veux montrer un joli nom (ex. `nom_affiche` = « Un indien dans l'Île »). Les scores continuent d'utiliser `nom`, donc rien ne casse.
 - `theme` / `emoji` / `couleur` (hex `#` + 6 caractères, via [htmlcolorcodes.com](https://htmlcolorcodes.com/fr/)).
 - `points_total` *(facultatif)* : total imposé. **Si vide**, l'appli **additionne les `Scores`**.
 - `rang` *(facultatif)* : classement imposé (1 = champion). **Si rempli**, il fixe l'ordre du podium — même si une autre équipe a plus de points (finale décisive). **Si vide**, l'ordre suit le total.

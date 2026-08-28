@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Maximize2, Users } from 'lucide-react'
 import type { AppData, Equipe } from '../types'
 import { classementGeneral, epreuvesTriees, membresEquipe, scoreEquipeEpreuve } from '../data/transform'
-import { couleurEquipe, medaille, photoEquipe, texteSurFond } from '../lib/utils'
+import { afficheEquipe, couleurEquipe, medaille, photoEquipe, texteSurFond } from '../lib/utils'
 import { ContenuVide } from './states'
 import { Lightbox } from './Lightbox'
 
@@ -28,6 +28,7 @@ export function EquipeFiche({
   const monRang = rangs.find((r) => r.equipe.nom === equipe.nom)
   const epreuves = epreuvesTriees(data.epreuves)
   const photo = photoEquipe(equipe.nom, equipe.photo)
+  const nomAff = afficheEquipe(equipe)
   const [zoom, setZoom] = useState(false)
 
   return (
@@ -40,7 +41,7 @@ export function EquipeFiche({
               {equipe.emoji}
             </span>
             <div>
-              <h2 className="text-2xl font-extrabold leading-tight">{equipe.nom}</h2>
+              <h2 className="text-2xl font-extrabold leading-tight">{nomAff}</h2>
               {equipe.theme && <p className="text-sm opacity-90">Thème : {equipe.theme}</p>}
             </div>
           </div>
@@ -77,11 +78,11 @@ export function EquipeFiche({
           type="button"
           onClick={() => setZoom(true)}
           className="group relative block w-full active:opacity-95"
-          aria-label={`Agrandir la photo de ${equipe.nom}`}
+          aria-label={`Agrandir la photo de ${nomAff}`}
         >
           <img
             src={photo}
-            alt={`Équipe ${equipe.nom}`}
+            alt={`Équipe ${nomAff}`}
             loading="lazy"
             className="h-56 w-full object-cover"
             onError={(e) => {
@@ -157,7 +158,7 @@ export function EquipeFiche({
       </section>
 
       {/* Visionneuse plein écran de la photo d'équipe */}
-      <Lightbox src={zoom ? photo : null} alt={equipe.nom} onClose={() => setZoom(false)} />
+      <Lightbox src={zoom ? photo : null} alt={nomAff} onClose={() => setZoom(false)} />
     </div>
   )
 }

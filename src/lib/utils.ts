@@ -68,6 +68,20 @@ export function resoudreImage(valeur: string): string | null {
   return `${import.meta.env.BASE_URL}${v.replace(/^\/+/, '')}`
 }
 
+/** Nom d'affichage d'une équipe : « nom_affiche » si fourni, sinon le nom interne. */
+export function afficheEquipe(equipe: { nom: string; nomAffiche?: string }): string {
+  return equipe.nomAffiche && equipe.nomAffiche.trim() !== '' ? equipe.nomAffiche.trim() : equipe.nom
+}
+
+/**
+ * Nom d'affichage à partir d'un nom interne (clé) et de la liste d'équipes :
+ * utile là où l'on n'a que le nom (Scores, Matchs…).
+ */
+export function afficheNom(equipes: { nom: string; nomAffiche?: string }[], nom: string): string {
+  const e = equipes.find((x) => x.nom.trim().toLowerCase() === nom.trim().toLowerCase())
+  return e ? afficheEquipe(e) : nom
+}
+
 /** Transforme un texte en identifiant de fichier (minuscules, sans accents, tirets). */
 export function slug(s: string): string {
   return (s || '')

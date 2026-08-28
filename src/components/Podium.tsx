@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import type { RangEquipe } from '../types'
-import { couleurEquipe, texteSurFond } from '../lib/utils'
+import { afficheEquipe, couleurEquipe, texteSurFond } from '../lib/utils'
 
 /**
  * Podium animé du classement général (1·2·3).
@@ -41,7 +41,7 @@ export function Podium({ rangs }: { rangs: RangEquipe[] }) {
               {e.emoji}
             </div>
             <div className="mt-1 line-clamp-2 text-center text-xs font-semibold leading-tight text-nuit">
-              {e.nom}
+              {afficheEquipe(e)}
             </div>
             <div className="text-sm font-extrabold text-nuit">{rang!.total} pts</div>
             <div

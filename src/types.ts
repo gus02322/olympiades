@@ -25,7 +25,10 @@ export interface EditionConfig {
 /** Une équipe (onglet Equipes). */
 export interface Equipe {
   annee: number
+  /** Nom interne (clé) — sert de référence dans Scores/Participants/Matchs. */
   nom: string
+  /** Nom d'affichage éventuel (colonne « nom_affiche »), sinon on affiche `nom`. */
+  nomAffiche?: string
   theme: string
   emoji: string
   couleur: string

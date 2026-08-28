@@ -4,7 +4,7 @@ import { useData } from '../data/DataContext'
 import { classementGeneral, membresEquipe } from '../data/transform'
 import { PageHeader } from '../components/PageHeader'
 import { ContenuVide } from '../components/states'
-import { couleurEquipe, photoEquipe, texteSurFond } from '../lib/utils'
+import { afficheEquipe, couleurEquipe, photoEquipe, texteSurFond } from '../lib/utils'
 
 /** Liste des équipes ; chaque carte mène à la fiche détaillée. */
 export default function Equipes() {
@@ -47,7 +47,7 @@ export default function Equipes() {
                   {equipe.emoji}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-lg font-extrabold">{equipe.nom}</p>
+                  <p className="truncate text-lg font-extrabold">{afficheEquipe(equipe)}</p>
                   {equipe.theme && (
                     <p className="truncate text-sm opacity-90">Thème : {equipe.theme}</p>
                   )}

@@ -6,7 +6,7 @@ import { EquipeFiche } from '../components/EquipeFiche'
 import { PageHeader } from '../components/PageHeader'
 import { ContenuVide } from '../components/states'
 import { STORAGE_KEY_PRENOM } from '../config'
-import { couleurEquipe, texteSurFond } from '../lib/utils'
+import { afficheNom, couleurEquipe, texteSurFond } from '../lib/utils'
 
 /** Lit le prénom mémorisé (localStorage). */
 function lirePrenom(): string {
@@ -135,7 +135,7 @@ export default function MonEquipe() {
                       {eq?.emoji ?? p.nom.charAt(0)}
                     </span>
                     <span className="flex-1 font-medium text-nuit">{p.nom}</span>
-                    <span className="text-xs text-nuit/50">{p.equipe}</span>
+                    <span className="text-xs text-nuit/50">{afficheNom(data.equipes, p.equipe)}</span>
                   </button>
                 </li>
               )

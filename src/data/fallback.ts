@@ -135,11 +135,12 @@ const noms2024 = equipes2024.map((e) => e.nom)
 /*  Édition 2026 (affiches de films) — les 4 équipes avec photos       */
 /* ------------------------------------------------------------------ */
 
+// Équipes nommées par couleur (comme dans le vrai Sheet), avec un nom d'affichage.
 const equipes2026: Equipe[] = [
-  { annee: 2026, nom: "Un indien dans l'Île", theme: 'Aventure', emoji: '🏹', couleur: '#F97316', points_total: 150, rang: 1, note: '' },
-  { annee: 2026, nom: "L'ayeuture c'est l'aventure", theme: 'Comédie', emoji: '🎬', couleur: '#22C55E', points_total: 135, rang: 2, note: '' },
-  { annee: 2026, nom: 'Les petits jaunes', theme: 'Pastis', emoji: '🍹', couleur: '#FDCB2D', points_total: 120, rang: 3, note: '' },
-  { annee: 2026, nom: 'Les grappes en folie', theme: 'Vendanges', emoji: '🍇', couleur: '#7C3AED', points_total: 95, rang: 4, note: '' },
+  { annee: 2026, nom: 'Orange', nomAffiche: "Un indien dans l'Île", theme: 'Aventure', emoji: '🟠', couleur: '#F97316', points_total: 150, rang: 1, note: '' },
+  { annee: 2026, nom: 'Vert', nomAffiche: "L'ayeuture c'est l'aventure", theme: 'Comédie', emoji: '🟢', couleur: '#22C55E', points_total: 135, rang: 2, note: '' },
+  { annee: 2026, nom: 'Jaune', nomAffiche: 'Les petits jaunes', theme: 'Pastis', emoji: '🟡', couleur: '#FDCB2D', points_total: 120, rang: 3, note: '' },
+  { annee: 2026, nom: 'Violet', nomAffiche: 'Les grappes en folie', theme: 'Vendanges', emoji: '🟣', couleur: '#7C3AED', points_total: 95, rang: 4, note: '' },
 ]
 
 /* ------------------------------------------------------------------ */
